@@ -45,6 +45,7 @@ recognition.onresult = function(event) {
   //noteTextarea.val(overAllNotes);
   console.log('in here');
   console.log('T: '+ transcript);
+  wordFrequency(overAllNotes);
 
   // Add the current transcript to the contents of our Note.
   // There is a weird bug on mobile, where everything is repeated twice.
@@ -65,8 +66,6 @@ recognition.onstart = function() {
 }
 recognition.onend = function() {
   console.log('on end');
-
-  recognition.start();
 }
 recognition.onspeechend = function() {
   console.log('You were quiet for a while so voice recognition turned itself off.');
@@ -118,4 +117,155 @@ function contains(target, pattern){
       value = value + target.includes(word);
     });
     return (value === 1)
+}
+
+function wordFrequency(content) {
+
+    /* Below is a regular expression that finds alphanumeric characters
+       Next is a string that could easily be replaced with a reference to a form control
+       Lastly, we have an array that will hold any words matching our pattern */
+    var pattern = /\w+/g,
+        string = content,
+        matchedWords = string.match( pattern );
+  
+    /* The Array.prototype.reduce method assists us in producing a single value from an
+       array. In this case, we're going to use it to output an object with results. */
+    var counts = matchedWords.reduce(function ( stats, word ) {
+        // remove these words from the list....
+    var wordList = `a
+    about
+    above
+    after
+    all
+    also
+    and
+    as
+    at
+    be
+    because
+    but
+    by
+    can
+    come
+    could
+    day
+    do
+    even
+    find
+    first
+    for
+    from
+    get
+    give
+    go
+    have
+    he
+    her
+    here
+    him
+    his
+    how
+    I
+    if
+    in
+    into
+    it
+    its
+    just
+    know
+    let
+    like
+    look
+    make
+    man
+    many
+    me
+    more
+    my
+    new
+    no
+    not
+    now
+    of
+    on
+    one
+    only
+    or
+    other
+    our
+    out
+    people
+    say
+    see
+    she
+    so
+    some
+    something
+    somewhere
+    take
+    tell
+    than
+    that
+    the
+    their
+    them
+    then
+    there
+    these
+    they
+    thing
+    think
+    this
+    those
+    time
+    to
+    two
+    up
+    use
+    very
+    want
+    way
+    we
+    well
+    what
+    when
+    which
+    who
+    will
+    with
+    would
+    year
+    you
+    your
+    `;
+        /* `stats` is the object that we'll be building up over time.
+           `word` is each individual entry in the `matchedWords` array */
+        if ( stats.hasOwnProperty( word ) ) {
+          var includes = wordList.includes(word);
+  
+          if (includes) {
+          } else {
+            stats[ word ] = stats[ word ] + 1;
+          }
+            /* `stats` already has an entry for the current `word`.
+               As a result, let's increment the count for that `word`. */
+            
+        } else {
+          var includes = wordList.includes(word);
+            /* `stats` does not yet have an entry for the current `word`.
+               As a result, let's add a new entry, and set count to 1. */
+              if (includes) {
+
+              } else {
+              stats[ word ] = 1;
+                $("#items").append("<p>"+word+"</p>");
+          }
+        }
+   
+        /* Because we are building up `stats` over numerous iterations,
+           we need to return it for the next pass to modify it. */
+           console.log(stats);
+        return stats;
+        
+    }, {} );
 }
