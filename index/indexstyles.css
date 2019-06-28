@@ -1,15 +1,25 @@
 body, html {
     height: 100%;
     background: url(fridge.jpg);
-      /* Full height */
-  height: 100%; 
 
   /* Center and scale the image nicely */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   }
-.container {
+h1 {
+  font-size: 5em;
+}
+.intro-header {
+  z-index: 1;
+  background-color: rgb(200,200,200,0.5);
+  width: 100%;
+  padding-left: 0px;
+  padding-right: 0px;
+}
 
+a {
+  font-size: 2.5em;
+  color: yellow;
 
 }

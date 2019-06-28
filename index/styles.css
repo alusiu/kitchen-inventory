@@ -1,0 +1,18 @@
+h4, p, a {
+
+font-family: 'Raleway', sans-serif;
+}
+h1, h2, h3 {
+
+font-family: 'Josefin Sans', sans-serif;
+}
+
+body {
+    height: 100%;
+    background-color: rgb(123, 191, 255, 0.6);
+    color: #fff;
+}
+
+ul, li {
+    color:  rgb(123, 191, 255);
+}
