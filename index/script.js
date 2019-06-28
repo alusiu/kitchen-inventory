@@ -298,9 +298,9 @@ function wordFrequency(content) {
         $("#items").empty();
 
         wordArray.forEach((word) => {
-            $("#items").append("<li class='list-group-item'>"+word+"<span class='delete-item text-red'>x</li>");
+            $("#items").append("<li class='list-group-item'>"+word+"<span class='delete-item text-red'> x </li>");
         });
-
+        
     return stats;
         
     }, {} );
@@ -335,11 +335,12 @@ function renderNotes(notes) {
     var html = '';
     if(notes.length) {
       notes.forEach(function(note) {
-        html+= `<li class="note">
+          console.log(note.content);
+
+        html+= `<li class="note list-group-item">
           <p class="header">
             <span class="date">${note.date}</span>
-            <a href="#" class="listen-note" title="Listen to Note">Listen to Note</a>
-            <a href="#" class="delete-note" title="Delete">Delete</a>
+            <a href="#" class="action-link delete-note" title="Delete">Delete</a>
           </p>
           <p class="content">${note.content}</p>
         </li>`;    
