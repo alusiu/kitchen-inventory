@@ -88,6 +88,15 @@ recognition.onerror = function(event) {
   };
 }
 
+notesList.on('click', function(e) {
+    e.preventDefault();
+    var target = $(e.target);
+    if(target.hasClass('delete-note')) {
+        var dateTime = target.siblings('.date').text();  
+        deleteNote(dateTime);
+        target.closest('.note').remove();
+    }
+});
 
 if ($('#saved-items').length > 0) {
     console.log('true');
@@ -289,7 +298,7 @@ function wordFrequency(content) {
         $("#items").empty();
 
         wordArray.forEach((word) => {
-            $("#items").append("<p class='item'>"+word+"</p>");
+            $("#items").append("<li class='list-group-item'>"+word+"<span class='delete-item text-red'>x</li>");
         });
 
     return stats;
@@ -320,9 +329,6 @@ function getAllNotes() {
   }
 
 
-function deleteNote(dateTime) {
-    localStorage.removeItem('note-' + dateTime); 
-  }
 
 
 function renderNotes(notes) {
@@ -343,4 +349,9 @@ function renderNotes(notes) {
       html = '<li><p class="content">You don\'t have any notes yet.</p></li>';
     }
     notesList.html(html);
+  }
+
+
+function deleteNote(dateTime) {
+    localStorage.removeItem('note-' + dateTime); 
   }
