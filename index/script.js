@@ -298,7 +298,7 @@ function wordFrequency(content) {
         $("#items").empty();
 
         wordArray.forEach((word) => {
-            $("#items").append("<li class='list-group-item'>"+word+"<span class='delete-item text-red'> x </li>");
+            $("#items").append("<li class='list-group-item'>"+word+"</li>");
         });
         
     return stats;
@@ -308,7 +308,12 @@ function wordFrequency(content) {
 }
 
 function saveNote(dateTime, content) {
-    localStorage.setItem('note-' + dateTime, content);
+  var i = 0;
+      content.forEach((c) => {
+        console.log(c);
+        localStorage.setItem('note-' + dateTime+i, c);
+        i++;
+    });
   }
 
 
@@ -339,15 +344,14 @@ function renderNotes(notes) {
 
         html+= `<li class="note list-group-item">
           <p class="header">
-            <span class="date">${note.date}</span>
-            <a href="#" class="action-link delete-note" title="Delete">Delete</a>
+            <a href="#" class="float-right action-link delete-note" title="Remove this item">X</a>
           </p>
           <p class="content">${note.content}</p>
         </li>`;    
       });
     }
     else {
-      html = '<li><p class="content">You don\'t have any notes yet.</p></li>';
+      html = '<li><p class="text-white content">You don\'t have any notes yet.</p></li>';
     }
     notesList.html(html);
   }
@@ -356,7 +360,3 @@ function renderNotes(notes) {
 function deleteNote(dateTime) {
     localStorage.removeItem('note-' + dateTime); 
   }
-
-  $( function() {
-    $( "#accordion" ).accordion();
-  } );
