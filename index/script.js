@@ -356,3 +356,7 @@ function renderNotes(notes) {
 function deleteNote(dateTime) {
     localStorage.removeItem('note-' + dateTime); 
   }
+
+  $( function() {
+    $( "#accordion" ).accordion();
+  } );
