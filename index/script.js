@@ -13,6 +13,13 @@ var notesList = $('ul#notes');
 var noteContent = '';
 var arr = [];
 var overAllNotes = '';
+var wordArray;
+var notesList = $('ul#notes');
+
+
+var dt = new Date();
+var dateTime = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+
 
 
 //This must match the channel you set up in your function
@@ -81,6 +88,15 @@ recognition.onerror = function(event) {
   };
 }
 
+
+if ($('#saved-items').length > 0) {
+    console.log('true');
+    var notes = getAllNotes();
+    renderNotes(notes);
+
+} else {
+    console.log('false');
+}
 /*-----------------------------
       App buttons and input 
 ------------------------------*/
@@ -101,7 +117,7 @@ $('#stop-record-btn').on('click', function(e) {
     recognition.stop();
     $('#stop-record-btn').hide();
     $('#start-record-btn').show();
-
+    saveNote(dateTime, wordArray);
     if(!noteContent.length) {
     }
     else {
@@ -238,34 +254,93 @@ function wordFrequency(content) {
     you
     your
     `;
-        /* `stats` is the object that we'll be building up over time.
-           `word` is each individual entry in the `matchedWords` array */
-        if ( stats.hasOwnProperty( word ) ) {
-          var includes = wordList.includes(word);
-  
-          if (includes) {
-          } else {
-            stats[ word ] = stats[ word ] + 1;
-          }
-            /* `stats` already has an entry for the current `word`.
-               As a result, let's increment the count for that `word`. */
-            
-        } else {
-          var includes = wordList.includes(word);
-            /* `stats` does not yet have an entry for the current `word`.
-               As a result, let's add a new entry, and set count to 1. */
-              if (includes) {
+    
+    /* `stats` is the object that we'll be building up over time.
+        `word` is each individual entry in the `matchedWords` array */
+    if ( stats.hasOwnProperty( word ) ) {
+        var includes = wordList.includes(word);
 
-              } else {
-              stats[ word ] = 1;
-                $("#items").append("<p>"+word+"</p>");
-          }
+        if (!includes) {
+            stats[ word ] = stats[ word ] + 1;
         }
-   
-        /* Because we are building up `stats` over numerous iterations,
-           we need to return it for the next pass to modify it. */
-           console.log(stats);
-        return stats;
+        /* `stats` already has an entry for the current `word`.
+            As a result, let's increment the count for that `word`. */
+        
+    } else {
+        var includes = wordList.includes(word);
+        /* `stats` does not yet have an entry for the current `word`.
+            As a result, let's add a new entry, and set count to 1. */
+            if (includes) {
+
+            } else {
+            stats[ word ] = 1;
+        }
+    }
+
+    // $("#items").append("<p>"+word+"</p>");
+
+
+    /* Because we are building up `stats` over numerous iterations,
+        we need to return it for the next pass to modify it. */
+        console.log("stats", stats);
+
+        wordArray = Object.keys(stats);
+
+        $("#items").empty();
+
+        wordArray.forEach((word) => {
+            $("#items").append("<p class='item'>"+word+"</p>");
+        });
+
+    return stats;
         
     }, {} );
+
 }
+
+function saveNote(dateTime, content) {
+    localStorage.setItem('note-' + dateTime, content);
+  }
+
+
+function getAllNotes() {
+    var notes = [];
+    var key;
+    for (var i = 0; i < localStorage.length; i++) {
+      key = localStorage.key(i);
+  
+      if(key.substring(0,5) == 'note-') {
+        notes.push({
+          date: key.replace('note-',''),
+          content: localStorage.getItem(localStorage.key(i))
+        });
+      } 
+    }
+    return notes;
+  }
+
+
+function deleteNote(dateTime) {
+    localStorage.removeItem('note-' + dateTime); 
+  }
+
+
+function renderNotes(notes) {
+    var html = '';
+    if(notes.length) {
+      notes.forEach(function(note) {
+        html+= `<li class="note">
+          <p class="header">
+            <span class="date">${note.date}</span>
+            <a href="#" class="listen-note" title="Listen to Note">Listen to Note</a>
+            <a href="#" class="delete-note" title="Delete">Delete</a>
+          </p>
+          <p class="content">${note.content}</p>
+        </li>`;    
+      });
+    }
+    else {
+      html = '<li><p class="content">You don\'t have any notes yet.</p></li>';
+    }
+    notesList.html(html);
+  }
